@@ -1,0 +1,53 @@
+{
+  "name": "neon/redirect",
+  "description": "N3 -- Redirect",
+  "version": "1.0.0-alpha-1",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Schulcz András",
+      "email": "andras.schulcz@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Neon\\Redirect\\": "src/",
+      "Neon\\Admin\\": "admin/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Neon\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Neon\\Redirect\\NeonRedirectServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "blendbyte/filament-title-with-slug": "1.0.6",
+    "illuminate/contracts": "^10.0",
+    "laravel/framework": "^10.0",
+    "spatie/laravel-activitylog": "^4.7",
+    "spatie/laravel-medialibrary": "^10.0",
+    "spatie/laravel-package-tools": "^1.14.0",
+    "spatie/laravel-tags": "^4.5"
+  },
+  "repositories": [],
+  "branch-alias": {},
+  "config": {
+    "platform": {
+      "php": "8.1"
+    },
+    "allow-plugins": {
+      "pestphp/pest-plugin": false,
+      "phpstan/extension-installer": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": false
+}
