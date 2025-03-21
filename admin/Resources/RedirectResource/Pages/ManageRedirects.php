@@ -6,6 +6,7 @@ use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Neon\Redirect\Models\Redirect;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Neon\Admin\Resources\RedirectResource;
 use Filament\Resources\Pages\ManageRecords;
@@ -50,15 +51,42 @@ class ManageRedirects extends ManageRecords
 	$validRedirections = $this->fixRedirections($validRedirections);
 
 	$htaccess = '<IfModule mod_rewrite.c>' . PHP_EOL;
+	$htaccess .= "\t<IfModule mod_negotiation.c>" . PHP_EOL;
+	$htaccess .= "\t\tOptions -MultiViews -Indexes" . PHP_EOL;
+	$htaccess .= "\t</IfModule>" . PHP_EOL;
+	$htaccess .= PHP_EOL;
+	$htaccess .= "\tRewriteEngine On" . PHP_EOL;
+	$htaccess .= PHP_EOL;
+	$htaccess .= "\t# Redirect to https" . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{HTTPS} !=on" . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{HTTP:X-Forwarded-Proto} !=https" . PHP_EOL;
+	$htaccess .= "\tRewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]" . PHP_EOL;
+	$htaccess .= PHP_EOL;
+	$htaccess .= "\t# Handle Authorization Header" . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{HTTP:Authorization} ." . PHP_EOL;
+	$htaccess .= "\tRewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]" . PHP_EOL;
+	$htaccess .= PHP_EOL;
+	$htaccess .= "\t# Redirect Trailing Slashes If Not A Folder..." . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{REQUEST_URI} (.+)/$" . PHP_EOL;
+	$htaccess .= "\tRewriteRule ^ %1 [L,R=301]" . PHP_EOL;
+	$htaccess .= PHP_EOL;
+	$htaccess .= "\t# Handle Front Controller..." . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL;
+	$htaccess .= "\tRewriteCond %{REQUEST_FILENAME} !-f" . PHP_EOL;
+	$htaccess .= "\tRewriteRule ^ index.php [L]" . PHP_EOL;
+	$htaccess .= PHP_EOL;
+	$htaccess .= "\t# Redirects" . PHP_EOL;
 	
 	foreach ($validRedirections as $from => $to) {
-		$htaccess .= "\t Redirect 301 " . $from . " " . $to . PHP_EOL;
+		$htaccess .= "\tRedirect 301 " . $from . " " . $to . PHP_EOL;
 	}
 	$htaccess .= '</IfModule>';
 
 	\Storage::disk('public')->put('.htaccess', $htaccess);
 
 	$file = storage_path('app/public/' . '.htaccess');
+	File::copy($file, './.htaccess');
 	
 	return Response::download($file, '.htaccess');
 
