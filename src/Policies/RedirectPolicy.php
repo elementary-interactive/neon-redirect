@@ -2,20 +2,19 @@
 
 namespace Neon\Redirect\Policies;
 
-use Nitrogen\CMS\Models\Admin;
+use Neon\Admin\Models\Admin;
 
 class RedirectPolicy
 {
-  /**
-   * Perform pre-authorization checks on the model.
-   */
-  public function before(Admin $user, string $ability): ?bool
-  {
-	//TODO: Add emails to the array to allow access to the redirect resource
-    /*if (in_array($user->email, ['...', '...', '...'])) {
-      return true;
-    }*/
+	/**
+	 * Perform pre-authorization checks on the model.
+	 */
+	public function before(Admin $user, string $ability): ?bool
+	{
+		if (in_array($user->email, config('neon-redirect.authorized_emails'))) {
+			return true;
+		}
 
-    return true;
-  }
+		return false;
+	}
 }

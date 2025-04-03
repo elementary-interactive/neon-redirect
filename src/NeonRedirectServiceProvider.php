@@ -17,6 +17,7 @@ class NeonRedirectServiceProvider extends PackageServiceProvider
 		$package
 			->name('neon-redirect')
 			->hasMigration('create_redirects_table')
+			->hasConfigFile()
 			->runsMigrations();
 	}
 }
