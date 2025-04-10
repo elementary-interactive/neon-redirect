@@ -5,9 +5,9 @@ namespace Neon\Admin\Resources\RedirectResource\Pages;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ManageRecords;
+use Illuminate\Support\Facades\Redis;
 use Neon\Admin\Resources\RedirectResource;
 use Neon\Redirect\Models\Redirect;
-use Illuminate\Support\Facades\Redis;
 
 class ManageRedirects extends ManageRecords
 {
@@ -29,12 +29,23 @@ class ManageRedirects extends ManageRecords
 
 	private function export()
 	{
-		Redis::command('del', ['redirects']);
+		$keys = Redis::command('keys', ['redirects:*']);
+		foreach ($keys as $key) {
+			Redis::command('del', [$key]);
+		}
 
 		$redirects = Redirect::all();
 
 		foreach ($redirects as $redirect) {
-			Redis::command('hset', ['redirects', $redirect->from, $redirect->to]);
+			Redis::command('set', [
+				"redirects:" . $redirect->from,
+				json_encode(
+					[
+						'to'   => $redirect->to,
+						'code' => $redirect->code ?? null,
+					]
+				),
+			]);
 		}
 	}
 
