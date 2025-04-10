@@ -7,7 +7,7 @@ use Filament\Actions\Action;
 use Filament\Resources\Pages\ManageRecords;
 use Neon\Admin\Resources\RedirectResource;
 use Neon\Redirect\Models\Redirect;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class ManageRedirects extends ManageRecords
 {
@@ -27,14 +27,14 @@ class ManageRedirects extends ManageRecords
 		];
 	}
 
-	private function export(Redis $redis)
+	private function export()
 	{
-		$redis->del('redirects');
+		Redis::command('del', ['redirects']);
 
 		$redirects = Redirect::all();
 
 		foreach ($redirects as $redirect) {
-			$redis->hset('redirects', $redirect->from, $redirect->to);
+			Redis::command('hset', ['redirects', $redirect->from, $redirect->to]);
 		}
 	}
 
