@@ -2,35 +2,37 @@
 
 namespace Neon\Redirect\Models;
 
-use Neon\Models\Traits\Uuid;
 use Neon\Models\Basic as BasicModel;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Neon\Models\Traits\Uuid;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\EloquentSortable\SortableTrait;
 
 class Redirect extends BasicModel
 {
-  use LogsActivity;
-  use SortableTrait;
-  use Uuid; // N30N UUID to forget auto increment stuff.
+	use LogsActivity;
+	use SortableTrait;
+	use Uuid;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-    'from',
-    'to',
-  ];
+	// N30N UUID to forget auto increment stuff.
 
-  protected $casts = [
-    'from' => 'string',
-    'to' => 'string',
-  ];
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = [
+		'from',
+		'to',
+	];
 
-  public function getActivitylogOptions(): LogOptions
-  {
-    return LogOptions::defaults();
-  }
+	protected $casts = [
+		'from' => 'string',
+		'to'   => 'string',
+	];
+
+	public function getActivitylogOptions(): LogOptions
+	{
+		return LogOptions::defaults();
+	}
 }
