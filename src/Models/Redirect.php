@@ -24,11 +24,13 @@ class Redirect extends BasicModel
 	protected $fillable = [
 		'from',
 		'to',
+		'code',
 	];
 
 	protected $casts = [
 		'from' => 'string',
 		'to'   => 'string',
+		'code' => 'string',
 	];
 
 	public function getActivitylogOptions(): LogOptions
