@@ -55,6 +55,10 @@ class RedirectResource extends Resource
 			Forms\Components\TextInput::make('to')
 				->required()
 				->label(__('neon-admin::admin.resources.redirect.form.fields.to.label')),
+			Forms\Components\TextInput::make('code')
+				->required()
+				->numeric()
+				->label(__('neon-admin::admin.resources.redirect.form.fields.code.label')),
 		];
 
 		return $t;
@@ -72,6 +76,11 @@ class RedirectResource extends Resource
 						->toggleable(isToggledHiddenByDefault: false),
 					Tables\Columns\TextColumn::make('to')
 						->label(__('neon-admin::admin.resources.redirect.form.fields.to.label'))
+						->searchable()
+						->sortable()
+						->toggleable(isToggledHiddenByDefault: false),
+					Tables\Columns\TextColumn::make('code')
+						->label(__('neon-admin::admin.resources.redirect.form.fields.to.code'))
 						->searchable()
 						->sortable()
 						->toggleable(isToggledHiddenByDefault: false),
