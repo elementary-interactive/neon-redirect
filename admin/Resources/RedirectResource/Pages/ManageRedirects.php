@@ -16,7 +16,7 @@ class ManageRedirects extends ManageRecords
 	protected function getHeaderActions(): array
 	{
 		return [
-			Action::make('Export')
+			Action::make('Aktiválás')
 				->icon('heroicon-m-arrow-down-tray')
 				->color('gray')
 				->action(function () {
