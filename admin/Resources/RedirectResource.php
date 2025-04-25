@@ -80,7 +80,7 @@ class RedirectResource extends Resource
 						->sortable()
 						->toggleable(isToggledHiddenByDefault: false),
 					Tables\Columns\TextColumn::make('code')
-						->label(__('neon-admin::admin.resources.redirect.form.fields.to.code'))
+						->label(__('neon-admin::admin.resources.redirect.form.fields.code.label'))
 						->searchable()
 						->sortable()
 						->toggleable(isToggledHiddenByDefault: false),
